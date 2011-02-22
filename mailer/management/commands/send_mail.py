@@ -14,7 +14,8 @@ class Command(NoArgsCommand):
     help = "Do one pass through the mail queue, attempting to send all mail."
     
     def handle_noargs(self, **options):
-        logging.basicConfig(level=logging.DEBUG, format="%(message)s")
+        if options['verbosity'] != '0':
+            logging.basicConfig(level=logging.DEBUG, format="%(message)s")
         logging.info("-" * 72)
         # if PAUSE_SEND is turned on don't do anything.
         if not PAUSE_SEND:
