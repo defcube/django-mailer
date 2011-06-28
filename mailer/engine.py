@@ -15,7 +15,8 @@ except ImportError:
     from django.core.mail import SMTPConnection
     get_connection = lambda backend=None, fail_silently=False, **kwds: SMTPConnection(fail_silently=fail_silently)
 
-from mailer.models import Message, DontSendEntry, MessageLog
+from mailer.models import Message, DontSendEntry
+#, MessageLog
 
 
 # when queue is empty, how long to wait (in seconds) before checking again
@@ -81,13 +82,13 @@ def send_all():
                 email = message.email
                 email.connection = connection
                 email.send()
-                MessageLog.objects.log(message, 1) # @@@ avoid using literal result code
+                #MessageLog.objects.log(message, 1) # @@@ avoid using literal result code
                 message.delete()
                 sent += 1
             except (socket_error, smtplib.SMTPSenderRefused, smtplib.SMTPRecipientsRefused, smtplib.SMTPAuthenticationError), err:
                 message.defer()
                 logging.info("message deferred due to failure: %s" % err)
-                MessageLog.objects.log(message, 3, log_message=str(err)) # @@@ avoid using literal result code
+                #MessageLog.objects.log(message, 3, log_message=str(err)) # @@@ avoid using literal result code
                 deferred += 1
                 # Get new connection, it case the connection itself has an error.
                 connection = None

@@ -202,55 +202,55 @@ RESULT_CODES = (
 )
 
 
-class MessageLogManager(models.Manager):
+# class MessageLogManager(models.Manager):
     
-    def log(self, message, result_code, log_message=""):
-        """
-        create a log entry for an attempt to send the given message and
-        record the given result and (optionally) a log message
-        """
+#     def log(self, message, result_code, log_message=""):
+#         """
+#         create a log entry for an attempt to send the given message and
+#         record the given result and (optionally) a log message
+#         """
         
-        return self.create(
-            message_data = message.message_data,
-            when_added = message.when_added,
-            priority = message.priority,
-            # @@@ other fields from Message
-            result = result_code,
-            log_message = log_message,
-        )
+#         return self.create(
+#             message_data = message.message_data,
+#             when_added = message.when_added,
+#             priority = message.priority,
+#             # @@@ other fields from Message
+#             result = result_code,
+#             log_message = log_message,
+#         )
 
 
-class MessageLog(models.Model):
+# class MessageLog(models.Model):
     
-    # fields from Message
-    message_data = models.TextField()
-    when_added = models.DateTimeField()
-    priority = models.CharField(max_length=1, choices=PRIORITIES)
-    # @@@ campaign?
+#     # fields from Message
+#     message_data = models.TextField()
+#     when_added = models.DateTimeField()
+#     priority = models.CharField(max_length=1, choices=PRIORITIES)
+#     # @@@ campaign?
     
-    # additional logging fields
-    when_attempted = models.DateTimeField(default=datetime.now)
-    result = models.CharField(max_length=1, choices=RESULT_CODES)
-    log_message = models.TextField()
+#     # additional logging fields
+#     when_attempted = models.DateTimeField(default=datetime.now)
+#     result = models.CharField(max_length=1, choices=RESULT_CODES)
+#     log_message = models.TextField()
     
-    objects = MessageLogManager()
+#     objects = MessageLogManager()
     
-    @property
-    def email(self):
-        return db_to_email(self.message_data)
+#     @property
+#     def email(self):
+#         return db_to_email(self.message_data)
     
-    @property
-    def to_addresses(self):
-        email = self.email
-        if email is not None:
-            return email.to
-        else:
-            return []
+#     @property
+#     def to_addresses(self):
+#         email = self.email
+#         if email is not None:
+#             return email.to
+#         else:
+#             return []
     
-    @property
-    def subject(self):
-        email = self.email
-        if email is not None:
-            return email.subject
-        else:
-            return ""
+#     @property
+#     def subject(self):
+#         email = self.email
+#         if email is not None:
+#             return email.subject
+#         else:
+#             return ""
